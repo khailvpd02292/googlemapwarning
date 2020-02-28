@@ -1,30 +1,13 @@
 import React, { Component } from 'react';
-import {
-    Text, View, TouchableOpacity, SafeAreaView, ScrollView, Image, FlatList,
-    ImageBackground, Animated, Alert, Dimensions, StyleSheet
-} from 'react-native';
+import {View, TouchableOpacity,FlatList, Alert} from 'react-native';
 import { Button, CheckBox } from 'react-native-elements'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import IconEntypo from 'react-native-vector-icons/Entypo';
 import Geolocation from '@react-native-community/geolocation';
-import SqliteHelper from '../hepper/sqlite.helper';
 import Modal from "react-native-modal";
-import { Dropdown } from 'react-native-material-dropdown';
-import BottomDrawer from 'rn-bottom-drawer';
 import DeviceInfo from 'react-native-device-info';
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import HeaderBottomDrawer from './HeaderBottomDrawer'
-import MapViews from './MapViews'
 import ContentBottomDrawer from './ContentBottomDrawer'
-import ModalScreen from './ModalScreen'
-import {
-    DotIndicator,
-    BallIndicator,
-} from 'react-native-indicators';
+import MapViews from './MapViews'
+import FilterScreen from './FilterScreen'
 import Loading from './Loading';
-const TAB_BAR_HEIGHT = 6;
 console.disableYellowBox = true;
 let uniqueId = DeviceInfo.getUniqueId();
 export default class Map extends Component {
@@ -37,10 +20,9 @@ export default class Map extends Component {
             longitude: 108.2090777,
             latitudenew: 0,
             longitudenew: 0,
-            title: '',
             FlatListTitle: [],
             loader: false,
-            Images: [],
+            FlatListWarning: [],
             isModalVisible: false,
             checkBoxChecked: [],
             region: {
@@ -49,6 +31,7 @@ export default class Map extends Component {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
             },
+            filter_name: ''
         }
         this.create = this.create.bind(this)
         this.onMapPress = this.onMapPress.bind(this)
@@ -57,7 +40,7 @@ export default class Map extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         setInterval(() => {
             this.checklocation();
-        }, 500);
+        }, 1000);
     }
     toggleModal = () => {
         this.setState({
@@ -75,7 +58,6 @@ export default class Map extends Component {
         this.location();
         this.getTitleWaring();
         this.getWarning();
-
     }
     componentDidMount() {
         const { navigation } = this.props;
@@ -85,6 +67,8 @@ export default class Map extends Component {
         });
     }
     getTitleWaring = async () => {
+        const arr = [];
+        this.state.FlatListTitle = arr;
         fetch('http://192.168.56.1:3000/title', {
             method: 'GET'
         })
@@ -133,11 +117,44 @@ export default class Map extends Component {
             .then(response => response.json())
             .then((responseJson) => {
                 this.setState({
-                    Images: [...responseJson],
+                    FlatListWarning: [...responseJson],
                     loader: false
                 })
             })
             .catch(error => console.log(error))
+    }
+    getFilter = () => {
+        const { filter_name } = this.state;
+        const arr = [];
+        this.state.FlatListTitle = arr;
+        var http = `http://192.168.56.1:3000/filter/${filter_name}`;
+        fetch(http, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    FlatListTitle: [...responseJson],
+                })
+                if (this.state.filter_name != '' && this.state.FlatListTitle == '') {
+                    Alert.alert(
+                        'Lỗi tìm kiếm',
+                        'Dữ liệu không tồn tại',
+                    )
+                }
+            })
+            .catch(error => console.log(error))
+
+    }
+    filterName = async () => {
+        if (this.state.filter_name == '') {
+            Alert.alert(
+                'Lỗi tìm kiếm',
+                'Vui lòng nhập từ khóa tìm kiếm',
+            )
+        } else {
+            await this.getFilter();
+        }
     }
     checklocation() {
         Geolocation.getCurrentPosition(position => {
@@ -241,6 +258,27 @@ export default class Map extends Component {
     closeModal() {
         this.getWarning();
         this.toggleModal();
+        this.setState({
+            filter_name: ''
+        })
+        this.getTitleWaring()
+    }
+    changeText = (filter_name) => {
+        if (filter_name == '') {
+            this.setState({
+                filter_name
+            })
+            this.getTitleWaring()
+        } else {
+            this.setState({
+                filter_name
+            })
+        }
+    }
+    changeValue = (value) => {
+        this.setState({
+            value
+        })
     }
     render() {
         const item = this.state;
@@ -253,7 +291,7 @@ export default class Map extends Component {
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 3, backgroundColor: 'white' }}>
                     <MapViews
-                        Images={item.Images}
+                        FlatListWarning={item.FlatListWarning}
                         region={item.region}
                         latitude={item.latitude}
                         longitude={item.longitude}
@@ -262,22 +300,15 @@ export default class Map extends Component {
                         onMapPress={this.onMapPress}
                     />
                 </View>
-                <BottomDrawer
-                    containerHeight={280}
-                    offset={TAB_BAR_HEIGHT}
-                    startUp={false}
-                >
-                    <HeaderBottomDrawer />
-                    {this.renderContent()}
-                    {/* <ContentBottomDrawer
-                        FlatListTitle={item.FlatListTitle}
-                        create={this.create}
-                        a={item.value}
-                        toggleModal={this.toggleModal}
-                        location={this.location}
-                        navigation={this.props.navigation}
-                    /> */}
-                </BottomDrawer>           
+                <ContentBottomDrawer
+                    FlatListTitle={item.FlatListTitle}
+                    create={this.create}
+                    value={item.value}
+                    toggleModal={this.toggleModal}
+                    location={this.location}
+                    navigation={this.props.navigation}
+                    changeValue={this.changeValue}
+                />
                 <Modal isVisible={item.isModalVisible} style={{ margin: 0, padding: 0 }}
                     backdropOpacity={1}
                     animationIn={'zoomInDown'}
@@ -287,112 +318,19 @@ export default class Map extends Component {
                     backdropTransitionInTiming={1000}
                     backdropTransitionOutTiming={1000}
                 >
-                    <View style={{ flex: 1, backgroundColor: 'white', borderRadius: 3 }}>
-                        <View style={{ flex: 1, alignItems: "center", justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 28, color: 'blue' }} >Danh sách cảnh báo</Text>
-                        </View>
-                        <View style={{ flex: 0.8, width: '96%', alignItems: "flex-end" }}>
-                            <TouchableOpacity style={{ width: 88, backgroundColor: '#2089dc', borderRadius: 3, height: 44, paddingLeft: 6, paddingTop: 4 }}
-                                onPress={this.closeModal}
-                            >
-                                <AntDesign
-                                    raised
-                                    name='filter'
-                                    color='#f8fbfe'
-                                    size={28}
-                                />
-                                <Text style={{ marginLeft: 30, marginTop: -25, marginBottom: 5, color: '#f8fbfe', fontSize: 20 }}>Lọc</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flex: 8.3, marginTop: 10 }}>
-                            <ScrollView>
-                                {item.FlatListTitle.map((val) => {
-                                    return (
-                                        <View key={val.value} style={{ height: 50, paddingLeft: 20 }}>
-                                            <CheckBox
-                                                containerStyle={{ backgroundColor: 'white', borderWidth: 0, width: 250 }}
-                                                textStyle={{ fontWeight: "normal", fontSize: 22 }}
-                                                onPress={() => this.onclickcb(val.value)}
-                                                checked={item.checkBoxChecked.includes(val.value)}
-                                                title={val.value}
-                                            />
-                                        </View >
-                                    )
-                                }
-                                )}
-                            </ScrollView>
-                        </View>
-                    </View>
+                     
+                            <FilterScreen
+                                closeModal={this.closeModal}
+                                checkBoxChecked={item.checkBoxChecked}
+                                FlatListTitle={item.FlatListTitle}
+                                onclickcb={this.onclickcb}
+                                changeText={this.changeText}
+                                filter_name={item.filter_name}
+                                filterName={this.filterName}
+                            />                    
+                    
                 </Modal>
             </View>
         )
     }
-    renderContent = () => {
-        return (
-            <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={{ width: '8%', height: 30 }}>
-                    <MaterialIcons
-                        raised
-                        name='my-location'
-                        type='font-awesome'
-                        color='black'
-                        size={26}
-                        onPress={this.location}
-                    />
-                </View>
-                <View style={{ width: '92%' }}>
-                    <View style={{ alignItems: 'center', height: 28, flexDirection: 'row' }}>
-                        <View style={{ flex: 15, alignItems: "center", justifyContent: 'center' }}>
-                            <Text style={{ color: 'blue', fontWeight: 'bold', fontSize: 20 }}>Thêm cảnh báo mới</Text>
-                        </View>
-                        <View style={{ flex: 1.6, paddingTop: 5 }}>
-                            <TouchableOpacity
-                                onPress={() =>
-                                    this.props.navigation.navigate('TitleWarning')
-                                }
-                                style={{ height: 28, width: 28 }}
-                            >
-                                <Feather
-                                    raised
-                                    name='plus-circle'
-                                    type='font-awesome'
-                                    color='red'
-                                    size={21}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{ flex: 1, marginTop: 20, marginRight: 34 }}>
-                        <View style={{ flexDirection: 'row', height: 80 }}>
-                            <View style={{ flex: 11 }}>
-                                <Dropdown
-                                    label='Chọn cảnh báo phù hợp'
-                                    data={this.state.FlatListTitle}
-                                    onChangeText={value => this.setState({ value })}
-                                    value={this.state.value}
-                                    baseColor='#191616'
-                                />
-                            </View>
-                        </View>
-                        <View style={{ marginTop: 20, width: 100, marginLeft: 210 }}>
-                            <Button title="Lưu"
-                                onPress={this.create} />
-                        </View>
-                        <View style={{ marginTop: -30, width: 180 }}>
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    color: 'blue'
-                                }}
-                                onPress={this.toggleModal}
-                            >
-                                Danh sách cảnh báo
-                                </Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        )
-    }
 }
-

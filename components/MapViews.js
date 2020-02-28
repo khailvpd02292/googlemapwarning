@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
-import {
-    Text, View, TouchableOpacity, SafeAreaView, ScrollView, Image, FlatList,
-    ImageBackground, Animated, Alert, Dimensions, StyleSheet
-} from 'react-native';
+import {Image} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 export class MapViews extends Component {
     render() {
+        const item = this.props
         return (
             <MapView
                 style={{ flex: 1 }}
-                region={this.props.region}
-                onPress={this.props.onMapPress}
-                minZoomLevel={15}
+                region={item.region}
+                onPress={item.onMapPress}
+                // minZoomLevel={15}
                 maxZoomLevel={19}
             >
                 <Marker coordinate={{
-                     latitude: this.props.latitude,
-                     longitude: this.props.longitude
+                     latitude: item.latitude,
+                     longitude: item.longitude
                 }}
                  title={"Vị trí của bạn"}
                 >
@@ -30,12 +28,15 @@ export class MapViews extends Component {
 
                     />
                 </Marker>
-                <Marker coordinate={{
-                    latitude: this.props.latitudenew,
-                    longitude: this.props.longitudenew
+                {item.latitudenew !=0 && item.longitudenew !=0 
+                ? <Marker coordinate={{
+                    latitude: item.latitudenew,
+                    longitude: item.longitudenew
                 }}
                 />
-                {this.props.Images.length > 0 && this.props.Images.map(marker => (
+                :null          
+            }              
+                {item.FlatListWarning.length > 0 && item.FlatListWarning.map(marker => (
                     <Marker
                         coordinate={marker}
                         title={marker.value}

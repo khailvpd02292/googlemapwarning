@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import {
-    Text, StyleSheet, View, ImageBackground, Image, TextInput,
-    Alert,
-    KeyboardAvoidingView,
-    Keyboard,
-    TouchableWithoutFeedback, TouchableOpacity
+    StyleSheet, View, ImageBackground, TextInput,
+    Alert, Keyboard, TouchableWithoutFeedback
 } from 'react-native'
 import validator from 'validator';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { FlatList } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
 import Chosefile from './Chosefile'
 const options = {
@@ -17,9 +12,7 @@ const options = {
     takePhotoButtonTitle: 'Máy ảnh',
     chooseFromLibraryButtonTitle: 'Chọn từ thư viện ảnh',
 };
-
 export default class TitleWarning extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -55,7 +48,6 @@ export default class TitleWarning extends Component {
                 console.error(error);
             });
     }
-
     getTitleWaring = async () => {
         fetch('http://192.168.56.1:3000/title')
             .then(response => response.json())
@@ -66,7 +58,6 @@ export default class TitleWarning extends Component {
             })
             .catch(error => console.log(error))
     }
-
     UNSAFE_componentWillMount = () => {
         this.getTitleWaring();
     }
@@ -89,7 +80,6 @@ export default class TitleWarning extends Component {
                 );
             }
         }
-
         if (validator.isEmpty(cutspace) || cutspace == '') {
             Alert.alert(
                 'Thêm thất bại',
@@ -113,7 +103,7 @@ export default class TitleWarning extends Component {
                     {
                         text: 'OK', onPress: () => {
                             this.getDataUsingPost(cutspace, this.state.Icon);
-                            this.props.navigation.navigate('Map')
+                            this.props.navigation.navigate('Home')
                         }
                     },
                 ],
@@ -137,16 +127,13 @@ export default class TitleWarning extends Component {
             }
         });
     }
-  render() {
-        var imagebackgrouds = {
-            uri: "https://redpithemes.com/Documentation/assets/img/page_bg/page_bg_blur02.jpg"
-        };
+    render() {
         return (
             <View style={{ flex: 1 }}>
-                <ImageBackground source={imagebackgrouds} style={{ width: '100%', height: '100%' }} >
+                <ImageBackground source={require('../image/page_bg_blur02.jpg')} style={{ flex: 1 }} >
                     <TouchableWithoutFeedback style={{ flex: 1, flexDirection: 'column' }} onPress={Keyboard.dismiss} >
                         <View style={{ flex: 1, flexDirection: 'column' }}>
-                            <View style={{ flex: 1, marginTop: 40, marginBottom: 14 }}>
+                            <View style={{ flex: 3.5, marginTop: 40, marginBottom: 14 }}>
                                 <TextInput style={styles.inputs}
                                     placeholder="Nhập tên cảnh báo"
                                     placeholderTextColor="gray"
@@ -161,10 +148,10 @@ export default class TitleWarning extends Component {
                                         title="Thêm mới" />
                                 </View>
                             </View>
-                            <View style={{ flex: 2.1, margin: 'auto', alignItems: "center", marginTop: 40 }}>
+                            <View style={{ flex: 7.5, margin: 'auto', alignItems: "center", marginTop: 40 }}>
                                 <Chosefile
-                                ImagePicker={this.ImagePicker}
-                                Icon={this.state.Icon}
+                                    ImagePicker={this.ImagePicker}
+                                    Icon={this.state.Icon}
                                 />
                             </View>
                         </View>
@@ -174,7 +161,6 @@ export default class TitleWarning extends Component {
         )
     }
 }
-
 const styles = StyleSheet.create({
     inputs: {
         height: 40,
