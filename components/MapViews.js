@@ -10,7 +10,7 @@ export class MapViews extends Component {
                 style={{ flex: 1 }}
                 region={item.region}
                 onPress={item.onMapPress}
-                // minZoomLevel={15}
+                minZoomLevel={14}
                 maxZoomLevel={19}
             >
                 <Marker coordinate={{

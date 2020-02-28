@@ -85,7 +85,6 @@ export default class TitleWarning extends Component {
                 'Thêm thất bại',
                 'Vui lòng không để trống trường cảnh báo',
             )
-
         } else if (this.state.Icon == '') {
             Alert.alert(
                 'Thêm thất bại',
@@ -119,6 +118,8 @@ export default class TitleWarning extends Component {
                 alert('error' + response.error)
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
+            } else if(response.data.length >65435){
+                alert('Dữ liệu ảnh vượt quá dung lượng cho phép')
             } else {
                 const source = 'data:image/jpeg;base64,' + response.data;
                 this.setState({
