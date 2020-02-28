@@ -40,7 +40,6 @@ target 'GoogleMapWarning' do
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
-  pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 

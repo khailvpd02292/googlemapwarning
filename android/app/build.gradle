@@ -184,7 +184,6 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules 
      implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_geolocation')
-    implementation project(':react-native-sqlite-storage')
     implementation project(':react-native-image-picker')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

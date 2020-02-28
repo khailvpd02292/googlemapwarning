@@ -318,7 +318,6 @@ export default class Map extends Component {
                     backdropTransitionInTiming={1000}
                     backdropTransitionOutTiming={1000}
                 >
-                     
                             <FilterScreen
                                 closeModal={this.closeModal}
                                 checkBoxChecked={item.checkBoxChecked}
@@ -328,7 +327,6 @@ export default class Map extends Component {
                                 filter_name={item.filter_name}
                                 filterName={this.filterName}
                             />                    
-                    
                 </Modal>
             </View>
         )

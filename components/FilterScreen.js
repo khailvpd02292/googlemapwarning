@@ -48,7 +48,7 @@ export class FilterScreen extends Component {
                                 />
                             </View>
                         </View>
-                        <View style={{ flex: 6.4 }}>
+                        <View style={{ flex: 6.5 }}>
                             <ScrollView>
                                 {item.FlatListTitle.map((val) => {
                                     return (
@@ -66,7 +66,7 @@ export class FilterScreen extends Component {
                                 )}
                             </ScrollView>
                         </View>
-                        <View style={{ flex: 1 }}></View>
+                        <View style={{ flex: 1.1 }}></View>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
