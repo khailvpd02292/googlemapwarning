@@ -23,7 +23,9 @@ export default class TitleWarning extends Component {
             this.create = this.create.bind(this);
         this.ImagePicker = this.ImagePicker.bind(this)
     }
-    getDataUsingPost(value, Icon) {
+
+    
+    getData(value, Icon) {
         var dataToSend = { value: value, Icon: Icon };
         var formBody = [];
         for (var key in dataToSend) {
@@ -91,23 +93,25 @@ export default class TitleWarning extends Component {
                 'Vui lòng chọn hình ảnh phù hợp',
             )
         } else {
-            Alert.alert(
-                'Thông báo',
-                'Bạn có chắc chắn muốn thêm dữ liệu',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'OK', onPress: () => {
-                            this.getDataUsingPost(cutspace, this.state.Icon);
-                            this.props.navigation.navigate('Home')
-                        }
-                    },
-                ],
-                { cancelable: false },
-            );
+            this.getData(cutspace, this.state.Icon);
+            this.props.navigation.navigate('Home')
+            // Alert.alert(
+            //     'Thông báo',
+            //     'Bạn có chắc chắn muốn thêm dữ liệu',
+            //     [
+            //         {
+            //             text: 'Cancel',
+            //             style: 'cancel',
+            //         },
+            //         {
+            //             text: 'OK', onPress: () => {
+            //                 this.getData(cutspace, this.state.Icon);
+            //                 this.props.navigation.navigate('Home')
+            //             }
+            //         },
+            //     ],
+            //     { cancelable: false },
+            // );
         }
     }
     ImagePicker = () => {
@@ -118,7 +122,7 @@ export default class TitleWarning extends Component {
                 alert('error' + response.error)
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
-            } else if(response.data.length >65435){
+            } else if (response.data.length > 65435) {
                 alert('Dữ liệu ảnh vượt quá dung lượng cho phép')
             } else {
                 const source = 'data:image/jpeg;base64,' + response.data;

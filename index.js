@@ -6,5 +6,5 @@ import App from './App';
 import {name as appName} from './app.json';
 import Login from './components/Login'
 import AppNavigator from './components/AppNavigator'
-AppRegistry.registerComponent(appName, () => AppNavigator);
+AppRegistry.registerComponent(appName, () => App);
 

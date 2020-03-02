@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, TouchableOpacity,FlatList, Alert} from 'react-native';
+import { View, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Button, CheckBox } from 'react-native-elements'
 import Geolocation from '@react-native-community/geolocation';
 import Modal from "react-native-modal";
@@ -8,6 +8,9 @@ import ContentBottomDrawer from './ContentBottomDrawer'
 import MapViews from './MapViews'
 import FilterScreen from './FilterScreen'
 import Loading from './Loading';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 console.disableYellowBox = true;
 let uniqueId = DeviceInfo.getUniqueId();
 export default class Map extends Component {
@@ -219,27 +222,13 @@ export default class Map extends Component {
                 'Vui lòng chọn vị trí cần cảnh báo trên bản đồ',
             )
         } else {
-            Alert.alert(
-                'Thông báo',
-                'Bạn có chắc chắn muốn thêm cảnh báo',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'OK', onPress: () => {
-                            this.addWarning(item.deviceId, item.value, item.latitudenew, item.longitudenew)
-                            this.setState({
-                                latitudenew: 0,
-                                longitudenew: 0,
-                            })
-                            this.getWarning();
-                        }
-                    },
-                ],
-                { cancelable: false },
-            );
+            this.addWarning(item.deviceId, item.value, item.latitudenew, item.longitudenew)
+            this.setState({
+                latitudenew: 0,
+                longitudenew: 0,
+            })
+            this.getWarning();
+        
         }
     }
     onclickcb = (value) => {
@@ -300,7 +289,7 @@ export default class Map extends Component {
                         onMapPress={this.onMapPress}
                     />
                 </View>
-                <ContentBottomDrawer
+                {/* <ContentBottomDrawer
                     FlatListTitle={item.FlatListTitle}
                     create={this.create}
                     value={item.value}
@@ -318,16 +307,16 @@ export default class Map extends Component {
                     backdropTransitionInTiming={1000}
                     backdropTransitionOutTiming={1000}
                 >
-                            <FilterScreen
-                                closeModal={this.closeModal}
-                                checkBoxChecked={item.checkBoxChecked}
-                                FlatListTitle={item.FlatListTitle}
-                                onclickcb={this.onclickcb}
-                                changeText={this.changeText}
-                                filter_name={item.filter_name}
-                                filterName={this.filterName}
-                            />                    
-                </Modal>
+                    <FilterScreen
+                        closeModal={this.closeModal}
+                        checkBoxChecked={item.checkBoxChecked}
+                        FlatListTitle={item.FlatListTitle}
+                        onclickcb={this.onclickcb}
+                        changeText={this.changeText}
+                        filter_name={item.filter_name}
+                        filterName={this.filterName}
+                    />
+                </Modal> */}
             </View>
         )
     }
