@@ -11,9 +11,10 @@ export class ContentBottomDrawer extends Component {
             <BottomDrawer
                 containerHeight={280}
                 offset={TAB_BAR_HEIGHT}
-                startUp={false}
+                startUp={this.props.startUp}
             >
-                <View style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, height: 34, alignItems: "center", justifyContent: "center" }}>
+                <View style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, height: 34, alignItems: "center", justifyContent: "center" }}  
+                >
                     <Feather
                         raised
                         name='minus'
@@ -32,12 +33,31 @@ export class ContentBottomDrawer extends Component {
                             onPress={this.props.location}
                         />
                     </View>
-                    <View style={{ width: '92%' }}>
+
+                    <View style={{ width: '92%' }}
+                    >
                         <View style={{ alignItems: 'center', height: 28, flexDirection: 'row' }}>
-                            <View style={{ flex: 15, alignItems: "center", justifyContent: 'center' }}>
-                                <Text style={{ color: 'blue', fontWeight: 'bold', fontSize: 20 }}>Thêm cảnh báo mới</Text>
+                            <View style={{ flex: 15, alignItems: "center", justifyContent: 'center' }}
+                            >
+                                <Text style={{ color: 'blue', fontWeight: 'bold', fontSize: 20 }}
+                                >Thêm cảnh báo mới</Text>
                             </View>
-                            <View style={{ flex: 1.6, paddingTop: 5 }}>
+
+                        </View>
+                        <View style={{ flex: 1, marginTop: 20, marginRight: 34 }}>
+
+                            <View style={{ flexDirection: 'row', height: 80 }}>
+                                <View style={{ flex: 11 }}>
+                                    <Dropdown
+                                        label='Chọn cảnh báo phù hợp'
+                                        data={this.props.FlatListTitle}
+                                        onChangeText={value => this.props.changeValue(value)}
+                                        value={this.props.value}
+                                        baseColor='#191616'
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ height: 28, width: 28, position: 'absolute', left: 324, top: 40 }}>
                                 <TouchableOpacity
                                     onPress={() =>
                                         this.props.navigation.navigate('TitleWarning')
@@ -52,19 +72,6 @@ export class ContentBottomDrawer extends Component {
                                         size={21}
                                     />
                                 </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={{ flex: 1, marginTop: 20, marginRight: 34 }}>
-                            <View style={{ flexDirection: 'row', height: 80 }}>
-                                <View style={{ flex: 11 }}>
-                                    <Dropdown
-                                        label='Chọn cảnh báo phù hợp'
-                                        data={this.props.FlatListTitle}
-                                        onChangeText={value => this.props.changeValue(value)}
-                                        value={this.props.value}
-                                        baseColor='#191616'
-                                    />
-                                </View>
                             </View>
                             <View style={{ marginTop: 20, width: 100, marginLeft: 210 }}>
                                 <Button title="Lưu"

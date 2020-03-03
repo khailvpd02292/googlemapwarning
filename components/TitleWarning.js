@@ -95,23 +95,6 @@ export default class TitleWarning extends Component {
         } else {
             this.getData(cutspace, this.state.Icon);
             this.props.navigation.navigate('Home')
-            // Alert.alert(
-            //     'Thông báo',
-            //     'Bạn có chắc chắn muốn thêm dữ liệu',
-            //     [
-            //         {
-            //             text: 'Cancel',
-            //             style: 'cancel',
-            //         },
-            //         {
-            //             text: 'OK', onPress: () => {
-            //                 this.getData(cutspace, this.state.Icon);
-            //                 this.props.navigation.navigate('Home')
-            //             }
-            //         },
-            //     ],
-            //     { cancelable: false },
-            // );
         }
     }
     ImagePicker = () => {

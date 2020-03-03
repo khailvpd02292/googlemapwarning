@@ -5,6 +5,7 @@ import { createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-n
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from './components/Home';
 import TitleWarning from './components/TitleWarning';
+import Warning from './components/Warning';
 
 const NaviBottomNav = createBottomTabNavigator({
   HomeNavNaviScreen: {
@@ -20,6 +21,16 @@ const NaviBottomNav = createBottomTabNavigator({
     screen: TitleWarning,
     navigationOptions: () => ({
       tabBarLabel: 'Title',
+      tabBarIcon: ({ tintColor }) => (
+        <AntDesign name="warning" size={24} color="#900" />
+      )
+    })
+
+  },
+  WarningNavNaviScreen: {
+    screen: Warning,
+    navigationOptions: () => ({
+      tabBarLabel: 'Warning',
       tabBarIcon: ({ tintColor }) => (
         <AntDesign name="warning" size={24} color="#900" />
       )

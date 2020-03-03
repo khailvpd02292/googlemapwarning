@@ -34,7 +34,8 @@ export default class Map extends Component {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
             },
-            filter_name: ''
+            filter_name: '',
+            startUp: false,
         }
         this.create = this.create.bind(this)
         this.onMapPress = this.onMapPress.bind(this)
@@ -297,6 +298,7 @@ export default class Map extends Component {
                     location={this.location}
                     navigation={this.props.navigation}
                     changeValue={this.changeValue}
+                    startUp={item.startUp}
                 />
                 <Modal isVisible={item.isModalVisible} style={{ margin: 0, padding: 0 }}
                     backdropOpacity={1}
